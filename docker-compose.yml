@@ -1,0 +1,119 @@
+version: '3'
+services:
+  front-envoy:
+    image: envoyproxy/envoy-alpine:v1.9.0
+    volumes:
+      - ./front_envoy/envoy-config.yaml:/etc/envoy-config.yaml
+    ports:
+      - "8080:80"
+      - "9901:9901"
+    command: "/usr/local/bin/envoy -c /etc/envoy-config.yaml --v2-config-only -l info --service-cluster 'front-envoy' --service-node 'front-envoy' --log-format '[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v'"
+
+  service_cart_envoy:
+    image: envoyproxy/envoy-alpine:v1.9.0
+    volumes:
+    - ./cart-service/cart-envoy-config.yaml:/etc/envoy-config.yaml
+    expose:
+      - "80"
+#    ports:
+#    - "9786:9786"
+#    - "9788:9788"
+    command: "/usr/local/bin/envoy -c /etc/envoy-config.yaml --v2-config-only -l info --service-cluster 'service_cart_envoy' --service-node 'service_cart_envoy' --log-format '[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v'"
+
+  service_cart:
+    build:
+      context: .
+      dockerfile: cart-service/Dockerfile
+    ports:
+    - "5222:5222"
+
+  service_user_envoy:
+    image: envoyproxy/envoy-alpine:v1.9.0
+    volumes:
+    - ./user-service/user-envoy-config.yaml:/etc/envoy-config.yaml
+    expose:
+      - "80"
+#    ports:
+#    - "9789:9789"
+    command: "/usr/local/bin/envoy -c /etc/envoy-config.yaml --v2-config-only -l info --service-cluster 'service_user_envoy' --service-node 'service_user_envoy' --log-format '[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v'"
+
+  service_user:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    ports:
+    - "3222:3222"
+
+  statsd_exporter:
+    image: prom/statsd-exporter:latest
+    ports:
+    - "9125:9125"
+    - "9102:9102"
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/config.yaml:/etc/prometheus.yaml
+    ports:
+    - "9090:9090"
+    command: "--config.file=/etc/prometheus.yaml"
+
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
+      - ./grafana/dashboard.json:/etc/grafana/provisioning/dashboards/dashboard.json
+    ports:
+    - "3000:3000"
+
+  zipkin:
+    image: openzipkin/zipkin
+#    networks:
+#      envoymesh:
+#        aliases:
+#        - zipkin
+    expose:
+    - "9411"
+    ports:
+    - "9411:9411"
+
+  authz:
+    build:
+      context: .
+      dockerfile: identity/Dockerfile-auth
+#    networks:
+#      envoymesh:
+#        aliases:
+#        - authz
+    expose:
+    - "9080"
+    ports:
+    - "9080:9080"
+
+  authz-server:
+    build:
+      context: .
+      dockerfile: oauth-authorization-server/Dockerfile
+    #    networks:
+    #      envoymesh:
+    #        aliases:
+    #        - authz
+    expose:
+    - "9081"
+    ports:
+    - "9081:9081"
+
+  oauth-resource-server:
+    build:
+      context: .
+      dockerfile: oauth-resource-server/Dockerfile
+    #    networks:
+    #      envoymesh:
+    #        aliases:
+    #        - authz
+    expose:
+    - "9082"
+    ports:
+    - "9082:9082"
