@@ -75,7 +75,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>Application</mainClass>
+					<mainClass>com.ecommerce.Application</mainClass>
 					<addResources>true</addResources>
 				</configuration>
 				<executions>

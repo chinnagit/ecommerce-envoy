@@ -65,6 +65,12 @@ static_resources:
                             cluster: "service_user"
                           decorator:
                             operation: checkAvailability
+                        - match:
+                            prefix: "/products"
+                          route:
+                            cluster: "service_products"
+                          decorator:
+                            operation: checkAvailability
                 http_filters:
 #                  - name: envoy.filters.http.jwt_authn
 #                    config:
@@ -165,6 +171,14 @@ static_resources:
       hosts:
         - socket_address:
             address: "service_user_envoy"
+            port_value: 80
+    - name: "service_products"
+      connect_timeout: "0.25s"
+      type: "strict_dns"
+      lb_policy: "ROUND_ROBIN"
+      hosts:
+        - socket_address:
+            address: "service_products_envoy"
             port_value: 80
     - name: "zipkin"
       connect_timeout: 1s

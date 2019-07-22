@@ -1,5 +1,40 @@
 version: '3'
 services:
+
+#  mysql:
+#    container_name: some-mysql
+#    image: mysql/mysql-server:5.7
+#    environment:
+#      MYSQL_DATABASE: test
+#      MYSQL_ROOT_PASSWORD: hellokoding
+#      MYSQL_ROOT_HOST: '%'
+#    ports:
+#    - "3306:3306"
+#    restart: always
+
+#  elastic_search:
+#    image: elasticsearch:7.2.0
+#    container_name: elastic_search
+#    ports:
+#    - "9200:9200"
+#    - "9300:9300"
+#    environment:
+#      ES_JAVA_OPTS: "-Xms750m -Xmx2g"
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+
+
+#  kibana:
+#    image: kibana:6.8.0
+#    ports:
+#    - "5601:5601"
+#    links:
+#    - elastic_search
+#    depends_on:
+#    - elastic_search
+
   front-envoy:
     image: envoyproxy/envoy-alpine:v1.9.0
     volumes:
@@ -26,6 +61,34 @@ services:
       dockerfile: cart-service/Dockerfile
     ports:
     - "5222:5222"
+
+  service_products_envoy:
+    image: envoyproxy/envoy-alpine:v1.9.0
+    volumes:
+    - ./products-service/products-envoy-config.yaml:/etc/envoy-config.yaml
+    expose:
+    - "80"
+    #    ports:
+    #    - "9786:9786"
+    #    - "9788:9788"
+    command: "/usr/local/bin/envoy -c /etc/envoy-config.yaml --v2-config-only -l info --service-cluster 'service_products_envoy' --service-node 'service_products_envoy' --log-format '[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v'"
+
+  service_products:
+    restart: always
+    build: ./products-service
+    working_dir: /products-service
+    volumes:
+      - ./products-service:/products-service
+      - ~/.m2:/root/.m2
+    ports:
+      - "2222:2222"
+    command: mvn clean spring-boot:run
+#    depends_on:
+##      - mysql
+#      - elastic_search
+    environment:
+      - ELASTICSEARCH_URL=http://elastic_search:9200
+      - HOST=elastic_search
 
   service_user_envoy:
     image: envoyproxy/envoy-alpine:v1.9.0

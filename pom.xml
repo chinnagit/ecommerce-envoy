@@ -52,5 +52,7 @@
         <module>oauth-resource-server</module>
         <module>oauth-authorization-server</module>
         <module>cart-service</module>
+        <module>user-service</module>
+        <module>products-service</module>
     </modules>
 </project>

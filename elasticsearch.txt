@@ -1,0 +1,75 @@
+https://hub.docker.com/_/elasticsearch
+
+1. docker network create elasticnetwork
+2. docker run -d --name elasticsearch --net elasticnetwork -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:6.8.0
+
+create clothes index
+postman -- 
+
+PUT /clothings/ HTTP/1.1
+Host: localhost:9200
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: b4d0661c-5b72-8bc1-bc07-3be1f96248f9
+
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "cloth": {
+      "properties": {
+        "name": {
+          "type": "text"
+        },
+        "description": {
+          "type": "text"
+        },
+        "category": {
+          "type": "keyword"
+        },
+        "brand": {
+          "type": "keyword"
+        },
+        "type": {
+          "type": "keyword"
+        },
+        "price": {
+          "type": "long"
+        },
+        "size": {
+        	"type": "keyword"
+        }
+      }
+    }
+  }
+}
+
+
+-- insert documents
+
+POST /clothings/_bulk HTTP/1.1
+Host: localhost:9200
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: e5a326c4-2b6e-d921-1667-09e645f80d66
+
+{ "index": { "_index": "clothings", "_type": "cloth" , "_id": 10} }
+{ "name": "north face mens jacket","price": "125.43","category": "men", "brand": "nike","description": "north face mens jacket", "type": "jackets", "size": "S" }
+{ "index": { "_index": "clothings", "_type": "cloth" , "_id": 20} }
+{ "name": "Nike jacket", "price": "100.50", "category": "men", "brand": "nike", "description": "Nike mens jacket", "type": "jackets", "size": "L" }
+{ "index": { "_index": "clothings", "_type": "cloth" , "_id": 30} }
+{ "name": "adidas jacket", "price": "200.50", "category": "women", "brand": "adidas", "description": "adidas womens jacket", "type": "jackets", "size": "M" }
+{ "index": { "_index": "clothings", "_type": "cloth" , "_id": 40} }
+{ "name": "kirkland jacket", "price": "25.50", "category": "boys", "brand": "kirkland", "description": "kirkland boys jacket", "type": "jackets", "size": "L"}
+
+
+-- get all documents
+
+GET /clothings/cloth/_search HTTP/1.1
+Host: localhost:9200
+Content-Type: application/json
+Cache-Control: no-cache
+Postman-Token: 6183cf7b-cd63-368f-ee04-e07b45e36273
+
