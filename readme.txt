@@ -46,4 +46,10 @@ Authorization: <token>
 
 elastic search, kibana docker compose helps to collect the sample ecommerece data.
 
+5. for the products -- api is not working due to elastic search issue.
+
+for now try to acess directly
+
+GET http://localhost:9080/products
+
 
