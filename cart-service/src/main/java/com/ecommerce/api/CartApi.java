@@ -47,7 +47,7 @@ public class CartApi {
 		users.add(new User("kanish", "xyz123"));
 	}
 
-	@PreAuthorize("#oauth2.hasScope('foo') and #oauth2.hasScope('read')")
+//	@PreAuthorize("#oauth2.hasScope('foo') and #oauth2.hasScope('read')")
 	@RequestMapping("/cart")
 	public List<Cart> findAll() {
 		logger.info("############################ Cart.findAll() ################################### ");

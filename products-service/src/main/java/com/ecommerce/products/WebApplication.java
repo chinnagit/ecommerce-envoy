@@ -8,13 +8,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class WebApplication {
     public static void main(String[] args) throws Exception {
         SpringApplication.run(WebApplication.class, args);
-//        loadProductCatalog();
+        loadProductCatalog();
     }
 
         private static void loadProductCatalog() throws Exception{
         try {
             ElasticSearchClient.makeConnection();
-            ElasticSearchClient.writeToIndex();
+//            ElasticSearchClient.writeToIndex();
 
         }catch (Exception exp){
             exp.printStackTrace();

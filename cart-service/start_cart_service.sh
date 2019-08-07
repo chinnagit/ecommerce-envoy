@@ -1,5 +1,5 @@
 #!/bin/sh
 
-/usr/bin/java -jar ../target/cart-service.jar
+java -jar ../target/cart-service.jar
 
 

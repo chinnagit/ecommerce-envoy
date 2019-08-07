@@ -51,6 +51,11 @@ public class Config {
     @Bean
     public RestHighLevelClient makeConnection() throws Exception {
 
+        String host = System.getenv("HOST");
+        if(host == null){
+            host = HOST;
+        }
+
         if(restHighLevelClient == null) {
             restHighLevelClient = new RestHighLevelClient(
                     RestClient.builder(

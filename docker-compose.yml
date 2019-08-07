@@ -74,21 +74,28 @@ services:
     command: "/usr/local/bin/envoy -c /etc/envoy-config.yaml --v2-config-only -l info --service-cluster 'service_products_envoy' --service-node 'service_products_envoy' --log-format '[METADATA][%Y-%m-%d %T.%e][%t][%l][%n] %v'"
 
   service_products:
-    restart: always
-    build: ./products-service
-    working_dir: /products-service
-    volumes:
-      - ./products-service:/products-service
-      - ~/.m2:/root/.m2
+    build:
+      context: .
+      dockerfile: products-service/Dockerfile
     ports:
-      - "2222:2222"
-    command: mvn clean spring-boot:run
-#    depends_on:
-##      - mysql
-#      - elastic_search
-    environment:
-      - ELASTICSEARCH_URL=http://elastic_search:9200
-      - HOST=elastic_search
+    - "2222:2222"
+
+#  service_products:
+#    restart: always
+#    build: ./products-service
+#    working_dir: /products-service
+#    volumes:
+#      - ./products-service:/products-service
+#      - ~/.m2:/root/.m2
+#    ports:
+#      - "2222:2222"
+#    command: mvn clean spring-boot:run
+##    depends_on:
+###      - mysql
+##      - elastic_search
+#    environment:
+#      - ELASTICSEARCH_URL=http://elastic_search:9200
+#      - HOST=elastic_search
 
   service_user_envoy:
     image: envoyproxy/envoy-alpine:v1.9.0

@@ -34,10 +34,10 @@ import java.util.List;
 public class ElasticSearchClient {
 
     //The config parameters for the connection
-    private static String HOST = "elastic_search";
-    private static final int PORT_ONE = 9200;
+    private static String HOST = "vpc-cc-load-es6-im-ktnei6x4qb2pfapqodh7sipoue.us-east-1.es.amazonaws.com";
+    private static final int PORT_ONE = 443;
 //    private static final int PORT_TWO = 9201;
-    private static final String SCHEME = "http";
+    private static final String SCHEME = "https";
 
     private static RestHighLevelClient restHighLevelClient;
     private static ObjectMapper objectMapper = new ObjectMapper();
