@@ -10,7 +10,7 @@ stats_sinks:
     name: "envoy.statsd"
     config:
       tcp_cluster_name: "statsd-exporter"
-      prefix: front-envoy    
+      prefix: front-envoy
 static_resources: 
   listeners:
     - 
@@ -43,7 +43,11 @@ static_resources:
                       name: "http-route"
                       domains: 
                         - "*"
-                      routes: 
+                      cors:
+                        allow_origin: ["*"]
+                        allow_headers: "*"
+                        allow_methods: "POST GET DELETE"
+                      routes:
                         -
                           match:
                             prefix: "/service/a"
@@ -106,6 +110,10 @@ static_resources:
 #                          prefix: "/cart"
 #                        requires:
 #                          provider_name: "ecommerce-jwt"
+                  - name: envoy.cors
+                    typed_config: {}
+                  - name: envoy.router
+                    typed_config: {}
                   - name: envoy.ext_authz
                     config:
                       http_service:
@@ -138,14 +146,14 @@ static_resources:
           socket_address:
             address: "statsd_exporter"
             port_value: 9125
-    - 
+    -
       name: "service_a"
       connect_timeout: "0.25s"
       type: "strict_dns"
       lb_policy: "ROUND_ROBIN"
       hosts:
-        - 
-          socket_address: 
+        -
+          socket_address:
             address: "service_a_envoy"
             port_value: 80
     - name: "service_c"

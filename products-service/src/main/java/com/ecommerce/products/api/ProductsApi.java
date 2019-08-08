@@ -3,11 +3,11 @@
  */
 package com.ecommerce.products.api;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import com.ecommerce.products.repository.ProductRepository;
 //import io.swagger.annotations.ApiOperation;
@@ -44,7 +44,7 @@ public class ProductsApi {
 
     protected Logger logger = Logger.getLogger(ProductsApi.class.getName());
 
-    Boolean isMongoDb = false;
+    Boolean isElastic = false;
     @Autowired
     ProductRepository productRepository ;
 
@@ -53,14 +53,14 @@ public class ProductsApi {
                                                                     // `config.properties`
         // List<String> keys = (List<String>) bundle.getKeys(); //gets the list of keys found in the
         // bundle (file)
-        isMongoDb = new Boolean(bundle.getString("ismongodb")); // gets the value for the key
+        isElastic = new Boolean(bundle.getString("isElastic")); // gets the value for the key
                                                                 // `mykey`
 
         products = new ArrayList<>();
-//        products.add(new Product(10, "iphone 3", "phones", new BigDecimal(299.99), "old model phone from Apple"));
-//        products.add(new Product(20, "iphone 8", "phones", new BigDecimal(599.99), "new model phone from Apple"));
-//        products.add(new Product(30, "switch", "gaming console", new BigDecimal(399.99), "Gaming console from Nintndo"));
-//        products.add(new Product(40, "Xbox", "gaming console", new BigDecimal(499.99), "Gaming console from microsoft"));
+        products.add(new Product("apple", 10, "iphone 3", "phones", "old model phone from Apple", new BigDecimal(299.99)));
+        products.add(new Product("apple",20, "iphone 8", "phones", "new model phone from Apple", new BigDecimal(599.99)));
+        products.add(new Product("Nintendo", 30, "switch", "gaming console", "Gaming console from Nintndo", new BigDecimal(399.99)));
+        products.add(new Product("Microsoft",40, "Xbox", "gaming console", "Gaming console from microsoft", new BigDecimal(499.99)));
     }
 
 //    /**
@@ -76,7 +76,7 @@ public class ProductsApi {
 //    @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid name supplied"), @ApiResponse(code = 404, message = "Product not found") })
 //    public List<Product> findByName(@PathVariable("name") String name) {
 //        logger.info(String.format("Product.findByName(%s)", name));
-////        if (isMongoDb) {
+////        if (isElastic) {
 ////            return productRepo.findByName(name);
 ////        } else {
 //            return products.stream().filter(it -> it.getName().equals(name)).collect(Collectors.toList());
@@ -91,7 +91,7 @@ public class ProductsApi {
 //    @Cacheable(value = "productByCategory", condition = "'men'.equals(#category)")
 //    public List<Product> findByCatefory(@PathVariable("category") String category) {
 //        logger.info(String.format("Product.findByCategory(%s)", category));
-////        if (isMongoDb) {
+////        if (isElastic) {
 ////            return productRepo.findByCategory(category);
 ////        } else {
 //            return products.stream().filter(it -> it.getCategory().equals(category)).collect(Collectors.toList());
@@ -106,15 +106,17 @@ public class ProductsApi {
     // @Cacheable("allproducts")
     public List<Product> findAll() {
         System.out.println("############################ Product.findAll() ###################################");
-        logger.info("############################ Product.findAll() ################################### " + isMongoDb);
-//        if (isMongoDb)
-//            return productRepo.findAll();
-//        else
-        try {
-            products = productRepository.getAllProducts();
-        }catch (Exception exp){
-            exp.printStackTrace();
+        logger.info("############################ Product.findAll() ################################### " + isElastic);
+        if (isElastic)
+            try {
+                products = productRepository.getAllProducts();
+            }catch (Exception exp){
+                exp.printStackTrace();
+            }
+        else{
+            return products;
         }
+
         return products;
     }
 
@@ -126,7 +128,7 @@ public class ProductsApi {
     @RequestMapping(value = "/products/{name}", method = RequestMethod.GET)
     public List<Product> findByName(@PathVariable("name") String name) {
         logger.info(String.format("Product.findByName(%s)", name));
-//        if (isMongoDb) {
+//        if (isElastic) {
 //            return productRepo.findByName(name);
 //        } else {
 //            return products.stream().filter(it -> it.getName().equals(name)).collect(Collectors.toList());
@@ -144,7 +146,7 @@ public class ProductsApi {
 //    @RequestMapping(value = "/products/", method = RequestMethod.PUT)
 //    public void updateProduct(@RequestBody Product product) {
 //        System.out.println("updating product");
-////        if (isMongoDb) {
+////        if (isElastic) {
 ////            List<Product> productOrgnl = productRepo.findByName(product.getName());
 ////            productOrgnl.get(0).setPrice(product.getPrice());
 ////            productRepo.save(product);
@@ -155,7 +157,7 @@ public class ProductsApi {
 //    // @RequestMapping(value = "/products/", method = RequestMethod.POST)
 //    // public void addProduct(@RequestBody Product product) {
 //    // System.out.println("adding product");
-//    // if (isMongoDb) {
+//    // if (isElastic) {
 //    // productRepo.save(product);
 //    // }
 //    //
@@ -164,7 +166,7 @@ public class ProductsApi {
 //    @RequestMapping(value = "/products/", method = RequestMethod.POST)
 //    public void addProducts(@RequestBody List<Product> products) {
 //        System.out.println("adding product");
-////        if (isMongoDb) {
+////        if (isElastic) {
 ////            productRepo.save(products);
 ////        }
 //
@@ -173,7 +175,7 @@ public class ProductsApi {
 //    @RequestMapping(value = "/products/{productName}", method = RequestMethod.DELETE)
 //    public void deleteProduct(@PathVariable("productName") String productName) throws Exception {
 //        System.out.println("deleting product");
-////        if (isMongoDb) {
+////        if (isElastic) {
 ////            List<Product> products = null;
 ////            try {
 ////                products = productRepo.findByName(productName);

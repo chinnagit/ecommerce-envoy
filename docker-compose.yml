@@ -114,40 +114,40 @@ services:
     ports:
     - "3222:3222"
 
-  statsd_exporter:
-    image: prom/statsd-exporter:latest
-    ports:
-    - "9125:9125"
-    - "9102:9102"
-
-  prometheus:
-    image: prom/prometheus
-    volumes:
-      - ./prometheus/config.yaml:/etc/prometheus.yaml
-    ports:
-    - "9090:9090"
-    command: "--config.file=/etc/prometheus.yaml"
-
-  grafana:
-    image: grafana/grafana
-    volumes:
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
-      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
-      - ./grafana/dashboard.json:/etc/grafana/provisioning/dashboards/dashboard.json
-    ports:
-    - "3000:3000"
-
-  zipkin:
-    image: openzipkin/zipkin
-#    networks:
-#      envoymesh:
-#        aliases:
-#        - zipkin
-    expose:
-    - "9411"
-    ports:
-    - "9411:9411"
+#  statsd_exporter:
+#    image: prom/statsd-exporter:latest
+#    ports:
+#    - "9125:9125"
+#    - "9102:9102"
+#
+#  prometheus:
+#    image: prom/prometheus
+#    volumes:
+#      - ./prometheus/config.yaml:/etc/prometheus.yaml
+#    ports:
+#    - "9090:9090"
+#    command: "--config.file=/etc/prometheus.yaml"
+#
+#  grafana:
+#    image: grafana/grafana
+#    volumes:
+#      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+#      - ./grafana/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+#      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/dashboard.yaml
+#      - ./grafana/dashboard.json:/etc/grafana/provisioning/dashboards/dashboard.json
+#    ports:
+#    - "3000:3000"
+#
+#  zipkin:
+#    image: openzipkin/zipkin
+##    networks:
+##      envoymesh:
+##        aliases:
+##        - zipkin
+#    expose:
+#    - "9411"
+#    ports:
+#    - "9411:9411"
 
   authz:
     build:
@@ -162,28 +162,28 @@ services:
     ports:
     - "9080:9080"
 
-  authz-server:
-    build:
-      context: .
-      dockerfile: oauth-authorization-server/Dockerfile
-    #    networks:
-    #      envoymesh:
-    #        aliases:
-    #        - authz
-    expose:
-    - "9081"
-    ports:
-    - "9081:9081"
-
-  oauth-resource-server:
-    build:
-      context: .
-      dockerfile: oauth-resource-server/Dockerfile
-    #    networks:
-    #      envoymesh:
-    #        aliases:
-    #        - authz
-    expose:
-    - "9082"
-    ports:
-    - "9082:9082"
+#  authz-server:
+#    build:
+#      context: .
+#      dockerfile: oauth-authorization-server/Dockerfile
+#    #    networks:
+#    #      envoymesh:
+#    #        aliases:
+#    #        - authz
+#    expose:
+#    - "9081"
+#    ports:
+#    - "9081:9081"
+#
+#  oauth-resource-server:
+#    build:
+#      context: .
+#      dockerfile: oauth-resource-server/Dockerfile
+#    #    networks:
+#    #      envoymesh:
+#    #        aliases:
+#    #        - authz
+#    expose:
+#    - "9082"
+#    ports:
+#    - "9082:9082"

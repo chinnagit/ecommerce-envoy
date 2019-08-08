@@ -47,6 +47,17 @@ public class Product implements Serializable {
     @JsonProperty("price")
     BigDecimal price;
 
+    public Product(String manufacturer, int productId,
+                   String category, String sku,
+                   String productName, BigDecimal price) {
+        this.manufacturer = manufacturer;
+        this.productId = productId;
+        this.category = category;
+        this.sku = sku;
+        this.productName = productName;
+        this.price = price;
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
