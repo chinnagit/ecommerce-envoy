@@ -1,0 +1,62 @@
+version: '3'
+services:
+
+  service_cart:
+    build:
+      context: .
+      dockerfile: cart-service/Dockerfile
+    ports:
+    - "5222:5222"
+
+  service_products:
+    build:
+      context: .
+      dockerfile: users-service/Dockerfile
+    ports:
+    - "2222:2222"
+
+  service_user:
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+    ports:
+    - "3222:3222"
+
+  authz:
+    build:
+      context: .
+      dockerfile: identity/Dockerfile-auth
+#    networks:
+#      envoymesh:
+#        aliases:
+#        - authz
+    expose:
+    - "9080"
+    ports:
+    - "9080:9080"
+
+  authz-server:
+    build:
+      context: .
+      dockerfile: oauth-authorization-server/Dockerfile
+    #    networks:
+    #      envoymesh:
+    #        aliases:
+    #        - authz
+    expose:
+    - "9081"
+    ports:
+    - "9081:9081"
+
+  oauth-resource-server:
+    build:
+      context: .
+      dockerfile: oauth-resource-server/Dockerfile
+    #    networks:
+    #      envoymesh:
+    #        aliases:
+    #        - authz
+    expose:
+    - "9082"
+    ports:
+    - "9082:9082"

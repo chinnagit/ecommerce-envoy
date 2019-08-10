@@ -1,0 +1,53 @@
+
+<div *ngFor="let user of users; let i = index">
+    <div class="clr-row" *ngIf="i%3===0">
+        <div class="clr-col-4">
+            <div class="card">
+                <!--<div class="card-header">-->
+                <!--Header-->
+                <!--</div>-->
+                <div class="card-block">
+                    <div class="card-title">
+                        {{users[i].name}}
+                    </div>
+                    <div class="card-text">
+                        <br>
+                        Price: {{users[i].password}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clr-col-4" *ngIf="users[i+1]">
+            <div class="card">
+                <!--<div class="card-header">-->
+                <!--Header-->
+                <!--</div>-->
+                <div class="card-block">
+                    <div class="card-title">
+                        {{users[i+1].name}}
+                    </div>
+                    <div class="card-text">
+                        <br>
+                        Price: {{users[i+1].password}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clr-col-4" *ngIf="users[i+2]">
+            <div class="card">
+                <!--<div class="card-header">-->
+                <!--Header-->
+                <!--</div>-->
+                <div class="card-block">
+                    <div class="card-title">
+                        {{users[i+2].name}}
+                    </div>
+                    <div class="card-text">
+                        <br>
+                        Price: {{users[i+2].password}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

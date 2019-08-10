@@ -44,12 +44,22 @@ Authorization: <token>
 
 4. To fill the data refer the ElasticSearchClient.java in products-service
 
-elastic search, kibana docker compose helps to collect the sample ecommerece data.
+elastic search, kibana docker compose helps to collect the sample ecommerce data.
 
-5. for the products -- api is not working due to elastic search issue.
+5. for the products
 
-for now try to acess directly
+-- Elastic search integration is pending
 
-GET http://localhost:9080/products
+GET http://localhost:2222/products
+
+6. to run the client module locally
+
+ng build
+
+npm start
+
+7. access the client
+
+http://localhost:8085
 
 
