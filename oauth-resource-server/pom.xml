@@ -16,7 +16,7 @@
 		<java.version>1.8</java.version>
 		<oauth.version>2.2.1.RELEASE</oauth.version>
 		<jwt.version>1.0.10.RELEASE</jwt.version>
-		<commons-io.version>2.6</commons-io.version>
+		<commons-io.version>2.7</commons-io.version>
 		<!-- The main class to start by executing java -jar -->
 		<start-class>com.ecommerce.config.ResourceServerApplication</start-class>
 	</properties>
